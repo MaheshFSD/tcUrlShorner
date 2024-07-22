@@ -2,7 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
-
+const bodyParser = require('body-parser')
+const URL = require('url').URL
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
@@ -18,6 +19,8 @@ app.get('/', function(req, res) {
 app.get('/api/hello', function(req, res) {
   res.json({ greeting: 'hello API' });
 });
+
+// for doing this url shortner task we use body-parser to parse the body and also url
 
 app.listen(port, function() {
   console.log(`Listening on port ${port}`);
