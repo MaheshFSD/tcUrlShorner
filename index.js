@@ -84,7 +84,7 @@ app.post('/api/shorturl', (req,res) => {
 app.get('/api/shorturl/:id', async (req,res) => {
   console.log(req.params.id, ' ------------ id -----');
   const redirectUrl = await orgUrls.findOne({shortId: +req.params.id});
-  if(!redirectUrl) res.redirect(redirectUrl.originalUrl);
+  if(redirectUrl) res.redirect(redirectUrl.originalUrl);
   else res.json({error: "Invalid short_url"});
 })
 
