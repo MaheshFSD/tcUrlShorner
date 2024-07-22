@@ -63,7 +63,7 @@ app.post('/api/shorturl', (req,res) => {
     else {
       const shortId = await orgUrls.countDocuments() + 1;
       console.log(shortId);
-      await orgUrls.insertOne({originalUrl: req.body.url, shoprtId: shortId})
+      await orgUrls.insertOne({originalUrl: req.body.url, shortId})
       res.json({
         "original_url": req.body.url,
         "short_url": shortId
@@ -74,11 +74,19 @@ app.post('/api/shorturl', (req,res) => {
 })
 
 // for redirecting to original site through shorturl
-app.get("/api/shorturl/:id", (req, res) => {
-  console.log(req.params, " --------- params ---");
-  // return res.redirect("http://www.google.com");
-  res.redirect(arr[req.params.id - 1].originalUrl);
-});
+// app.get("/api/shorturl/:id", (req, res) => {
+//   console.log(req.params, " --------- params ---");
+//   // return res.redirect("http://www.google.com");
+//   res.redirect(arr[req.params.id - 1].originalUrl);
+// });
+
+// we can get the data redirecting url from mongodb for get req
+app.get('/api/shorturl/:id', async (req,res) => {
+  console.log(req.params.id, ' ------------ id -----');
+  const redirectUrl = await orgUrls.findOne({shortId: +req.params.id});
+  if(!redirectUrl) res.redirect(redirectUrl.originalUrl);
+  else res.json({error: "Invalid short_url"});
+})
 
 app.listen(port, function() {
   console.log(`Listening on port ${port}`);
