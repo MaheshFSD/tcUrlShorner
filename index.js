@@ -24,7 +24,6 @@ app.get('/api/hello', function(req, res) {
 });
 
 // for doing this url shortner task we use body-parser to parse the body and also url
-
 app.post("/api/shorturl", (req, res) => {
   console.log(req.body, " ------- req.body");
   // let originalURL = "www.example.com";
@@ -42,6 +41,13 @@ app.post("/api/shorturl", (req, res) => {
   } catch (err) {
     res.json({ error: "Invalid URL" });
   }
+});
+
+// for redirecting to original site through shorturl
+app.get("/api/shorturl/:id", (req, res) => {
+  console.log(req.params, " --------- params ---");
+  // return res.redirect("http://www.google.com");
+  res.redirect(arr[req.params.id - 1].originalUrl);
 });
 
 app.listen(port, function() {
